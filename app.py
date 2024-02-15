@@ -1,41 +1,51 @@
-import streamlit as st
 import plotly.express as px
+import streamlit as st
+
 from utils.data_manager import DataManager
 
 
-def get_df():
-    dm = DataManager()
+def main():
+    # initialize dashboard and data manager
+    st.title("Ekinox Students Improvability Study")
+    with st.sidebar:
+        data_directory = st.text_input("Data directory:", "")
+        dm = DataManager(data_directory=data_directory)
+        kpi_columns = st.multiselect("Improvability features:", dm.columns)
+        dm.reset_kpi_columns(kpi_columns)
+        filter_by = st.selectbox("Filter by:", dm.columns, index=dm.columns.index('sex'))
+
+    # load the data
     dm.load_data()
     dm.process_kpi_data()
     dm.generate_kpi()
-    return dm.data
 
+    # 1st chart: FinalGrade x ImprovabilityScore
+    chart1 = px.scatter(dm.data,
+                        x='FinalGrade',
+                        y='ImprovabilityScore',
+                        title='FinalGrade x ImrovabilityScore',
+                        hover_data=['StudentID', 'FirstName', 'FamilyName'],
+                        color=filter_by)
+    chart1.update_layout(xaxis=dict(autorange='reversed'))
 
-def main():
-    st.title("Dashboard 0")
+    # 2nd chart: FinalGrade Histogram
+    chart2 = px.histogram(dm.data,
+                          x='FinalGrade',
+                          color=filter_by,
+                          marginal='box',
+                          title=f'FinalGrade distribution by {filter_by}')
 
-    # Read and process the data
-    df = get_df()
-    X = df['FinalGrade']
-    Y = df['ImporvabilityScore']
+    # 3rd chart: ImprovabilityScore Histogram
+    chart3 = px.histogram(dm.data,
+                          x='ImprovabilityScore',
+                          color=filter_by,
+                          marginal='box',
+                          title=f'ImprovabilityScore distribution by {filter_by}')
 
-    # Create Plotly scatter plot
-    fig = px.scatter(df,
-                     x='FinalGrade',
-                     y='ImprovabilityScore',
-                     title='Dashboard',
-                     hover_data=['StudentID', 'FirstName', 'FamilyName'],
-                     color='sex',
-                     symbol='address',
-                     size=df['age']-df['age'].min())
-    fig.update_traces(textposition='top center')
-    fig.update_layout(xaxis=dict(autorange='reversed'))
-
-    fig2 = px.histogram(df, x='ImporvabilityScore',
-                        color='sex', marginal='box', title='Distribution by sex')
-    # Display scatter plot in Streamlit
-    st.plotly_chart(fig)
-    st.plotly_chart(fig2)
+    # Display charts
+    st.plotly_chart(chart1)
+    st.plotly_chart(chart2)
+    st.plotly_chart(chart3)
 
 
 if __name__ == "__main__":

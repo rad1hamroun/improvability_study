@@ -28,14 +28,17 @@ streamlit run app.py
 
 This will launch the dashboard in your default web browser. You can now interact with the dashboard by following the on-screen instructions.
 
+![Dashboard Preview](Screenshot%20from%202024-02-15%2011-00-08.png)
+
 ## Features
 
-- **Feature 1:** [Description of feature 1]
-- **Feature 2:** [Description of feature 2]
-- **Feature 3:** [Description of feature 3]
+- **Data directory:** You can set up a custom data directory. If the given data directory doesn't exist or empty, 
+the data will be loaded from the default directory within the repository
+- **Improvability features:** You can multi-select the columns on which the improvability score will be calculated 
+- **Filter by:** Choose a column with which you want to filter the dashboard
 
 ## Charts
 
-- **Chart 1:** 
-- **Chart 2:**
-- **Chart 3:**
+- **FinalGrade x ImprovabilityScore:** Scatter plot showing students according to their FinalGrade and ImprovabilityScore 
+- **FinalGrade Distribution**: Histogram of the FinalGrade variable
+- **ImprovabilityScore Distribution**: Histogram of the ImprovabilityScore KPI
