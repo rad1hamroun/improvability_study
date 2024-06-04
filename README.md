@@ -1,4 +1,4 @@
-# Ekinox Students Improvability Study
+# Students Improvability Study
 
 This project is a Streamlit dashboard designed to study students improvability based on various collected variables.
 
